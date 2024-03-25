@@ -1,0 +1,40 @@
+apiVersion: toolchain.dev.openshift.com/v1alpha1
+kind: TierTemplate
+metadata:
+  name: appstudio-tenant
+  namespace: toolchain-host-operator
+spec:
+  objects:
+  - apiVersion: v1
+    kind: Namespace
+    metadata:
+      annotations:
+        openshift.io/description: {{ .spaceName }}
+        openshift.io/display-name: {{ .spaceName }}
+        openshift.io/requester: {{ .spaceName }}
+      labels:
+        appstudio.redhat.com/workspace_name: {{ .spaceName }}
+        name: {{ .spaceName }}-tenant
+      name: {{ .spaceName }}-tenant
+  - apiVersion: appstudio.redhat.com/v1alpha1
+    kind: Environment
+    metadata:
+      name: development
+      namespace: {{ .spaceName }}-tenant
+    spec:
+      deploymentStrategy: AppStudioAutomated
+      displayName: Development
+      type: Non-POC
+  - apiVersion: v1
+    kind: ResourceQuota
+    metadata:
+      name: compute-deploy
+      namespace: {{ .spaceName }}-tenant
+    spec:
+      hard:
+        limits.cpu: "20"
+        limits.memory: 32Gi
+        requests.cpu: 1750m
+        requests.memory: 32Gi
+      scopes:
+      - NotTerminating

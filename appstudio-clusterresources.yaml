@@ -1,0 +1,36 @@
+apiVersion: toolchain.dev.openshift.com/v1alpha1
+kind: TierTemplate
+metadata:
+  name: appstudio-clusterresources
+  namespace: toolchain-host-operator
+spec:
+  objects:
+  - apiVersion: quota.openshift.io/v1
+    kind: ClusterResourceQuota
+    metadata:
+      name: for-{{ .spaceName }}-deployments
+    spec:
+      quota:
+        hard:
+          count/deploymentconfigs.apps: 30
+          count/deployments.apps: 30
+          count/pods: 600
+      selector:
+        annotations: null
+        labels:
+          matchLabels:
+            toolchain.dev.openshift.com/space: {{ .spaceName }}
+  - apiVersion: quota.openshift.io/v1
+    kind: ClusterResourceQuota
+    metadata:
+      name: for-{{ .spaceName }}-replicas
+    spec:
+      quota:
+        hard:
+          count/replicasets.apps: 30
+          count/replicationcontrollers: 30
+      selector:
+        annotations: null
+        labels:
+          matchLabels:
+            toolchain.dev.openshift.com/space: {{ .spaceName }}

@@ -1,0 +1,19 @@
+apiVersion: toolchain.dev.openshift.com/v1alpha1
+kind: TierTemplate
+metadata:
+  name: appstudio-admin
+  namespace: toolchain-host-operator
+spec:
+  objects:
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: Role
+    metadata:
+      name: appstudio-admin-user-actions
+      namespace: {{ .namespace }}
+    rules:
+    - apiGroups:
+      - appstudio.redhat.com
+        resources:
+        - *
+        verbs:
+        - *

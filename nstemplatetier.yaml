@@ -1,0 +1,17 @@
+apiVersion: toolchain.dev.openshift.com/v1alpha1
+kind: NSTemplateTier
+metadata:
+  name: appstudio
+  namespace: toolchain-host-operator
+spec:
+  clusterResources:
+    templateRef: appstudio-clusterresources
+  namespaces:
+  - templateRef: appstudio-tenant
+  spaceRoles:
+    admin:
+      templateRef: appstudio-admin
+    contributor:
+      templateRef: appstudio-contributor
+    maintainer:
+      templateRef: appstudio-maintainer
